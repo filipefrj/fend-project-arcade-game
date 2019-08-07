@@ -9,6 +9,10 @@ class Enemy {
         this.x = x;
         this.y = y;
         this.s = s;
+        this.width = 98;
+        this.height = 66;
+        this.xInterval = 3;
+        this.yInterval = 76;
     }
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
@@ -39,6 +43,10 @@ class Player {
         this.y = y;
         this.h = 0;
         this.v = 0;
+        this.width = 30;
+        this.height = 20;
+        this.xInterval = 37.5;
+        this.yInterval = 109;
     }
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
@@ -52,6 +60,11 @@ class Player {
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+    // Render player animation when hit by one of the enemies
+    restart(dt) {
+        this.x = 202;
+        this.y = 404;
     }
     handleInput(expression) {
         switch (expression) {

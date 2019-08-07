@@ -79,7 +79,17 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions(dt);
+    }
+
+    function checkCollisions(dt) {
+        allEnemies.forEach(function(enemy) {
+            if (enemy.x < 505 && enemy.x > 0) {
+                if (enemy.x + enemy.xInterval < player.x + player.xInterval + player.width && enemy.x + enemy.xInterval + enemy.width > player.x + player.xInterval && enemy.y + enemy.yInterval < player.y + player.yInterval + player.height && enemy.y + enemy.yInterval + enemy.height > player.y + player.yInterval) {
+                    player.restart(dt);
+                }
+            }
+        });
     }
 
     /* This is called by the update function and loops through all of the
