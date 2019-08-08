@@ -54,8 +54,34 @@ class Player {
         // You should multiply any movement by the dt parameter
         // which will ensure the game runs at the same speed for
         // all computers.
-        this.x = this.x + this.h * 100 * dt;
-        this.y = this.y + this.v * 100 * dt;
+
+        // Check if player is far from the borders and allow player to move freely
+        if (this.x > 0 && this.x < 404 && this.y > 50 && this.y < 450) {
+            this.x = this.x + this.h * 100 * dt;
+            this.y = this.y + this.v * 100 * dt;
+        }
+        // As player is reaches one of the borders
+        else {
+            // Check if player has hit left border and stop his movement in that direction
+            if (this.x + (this.xInterval / 2) <= 0 && this.h < 0) {
+                this.h = 0;
+            }
+            // Check if player's hit right border
+            if (this.x - (this.xInterval / 2) >= 404 && this.h > 0) {
+                this.h = 0;
+            }
+            // Upper border
+            if (this.y + this.yInterval <= 50 && this.v < 0) {
+                this.v = 0;
+            }
+            // Lower border
+            if (this.y >= 450 && this.v > 0) {
+                this.v = 0;
+            }
+            // Allows player to move in any other direction, except to the direction detected above
+            this.x = this.x + this.h * 100 * dt;
+            this.y = this.y + this.v * 100 * dt;
+        }
     }
     // Draw the enemy on the screen, required method for game
     render() {
