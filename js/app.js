@@ -70,10 +70,6 @@ class Player {
             if (this.x - (this.xInterval / 2) >= 404 && this.h > 0) {
                 this.h = 0;
             }
-            // Upper border
-            if (this.y + this.yInterval <= 50 && this.v < 0) {
-                this.v = 0;
-            }
             // Lower border
             if (this.y >= 450 && this.v > 0) {
                 this.v = 0;
@@ -81,6 +77,10 @@ class Player {
             // Allows player to move in any other direction, except to the direction detected above
             this.x = this.x + this.h * 100 * dt;
             this.y = this.y + this.v * 100 * dt;
+            // If player reaches the water blocks he wins!
+            if (this.y + this.yInterval <= 90) {
+                this.restart(dt);
+            }
         }
     }
     // Draw the enemy on the screen, required method for game
