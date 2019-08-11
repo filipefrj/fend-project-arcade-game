@@ -60,7 +60,7 @@ class Player {
             this.x = this.x + this.h * 100 * dt;
             this.y = this.y + this.v * 100 * dt;
         }
-        // As player is reaches one of the borders
+        // As player reaches one of the borders
         else {
             // Check if player has hit left border and stop his movement in that direction
             if (this.x + (this.xInterval / 2) <= 0 && this.h < 0) {
@@ -126,9 +126,9 @@ class Player {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-const enemy1 = new Enemy(-101, 42.75, 1);
-const enemy2 = new Enemy(-303, 128.25, 2);
-const enemy3 = new Enemy(-50.5, 213.75, 1.5);
+const enemy1 = new Enemy(-101, 131, 1);
+const enemy2 = new Enemy(-303, 212, 2);
+const enemy3 = new Enemy(-50.5, 293, 1.5);
 let allEnemies = [enemy1, enemy2, enemy3];
 const player = new Player(202, 404);
 
