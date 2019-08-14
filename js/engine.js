@@ -86,7 +86,15 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             if (enemy.x < 505 && enemy.x > 0) {
                 if (enemy.x + enemy.xInterval < player.x + player.xInterval + player.width && enemy.x + enemy.xInterval + enemy.width > player.x + player.xInterval && enemy.y + enemy.yInterval < player.y + player.yInterval + player.height && enemy.y + enemy.yInterval + enemy.height > player.y + player.yInterval) {
-                    player.restart(dt);
+                    let hit = [];
+                    if (enemy.x < player.x) {
+                        hit = [0, 80];
+                    }
+                    if (player.x < enemy.x) {
+                        hit = [40, 80];
+                    }
+                    enemy.freeze();
+                    player.lose(hit);
                 }
             }
         });
@@ -184,7 +192,8 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/sand-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Hit.png'
     ]);
     Resources.onReady(init);
 

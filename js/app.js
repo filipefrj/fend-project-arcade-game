@@ -1,6 +1,6 @@
 // Enemies our player must avoid
 class Enemy {
-    constructor(x, y, s) {
+    constructor(x, y, l) {
         // Variables applied to each of our instances go here,
         // we've provided one for you to get started
         // The image/sprite for our enemies, this uses
@@ -8,7 +8,8 @@ class Enemy {
         this.sprite = 'images/enemy-bug.png';
         this.x = x;
         this.y = y;
-        this.s = s;
+        this.level = l;
+        this.speed = 100 * (1.0 + Math.random()) * (1.0 + l/10)
         this.width = 98;
         this.height = 66;
         this.xInterval = 3;
@@ -20,11 +21,21 @@ class Enemy {
         // You should multiply any movement by the dt parameter
         // which will ensure the game runs at the same speed for
         // all computers.
-        (this.x > 505) ? (this.x = -202 + this.s * 100 * dt) : (this.x = this.x + this.s * 100 * dt);
+        (this.x > 505) ? (this.x = -202 + this.speed * dt) : (this.x = this.x + this.speed * dt);
     }
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+    freeze() {
+        this.speed = 0;
+        window.setTimeout(function restartEnemy() {
+            allEnemies.forEach(function searchEnemy(enemy) {
+                if (enemy.speed === 0) {
+                    enemy.speed = 100 * (1.0 + Math.random()) * (1.0 + enemy.level/10)
+                }
+            });
+        }, 1000);
     }
 }
 
@@ -47,6 +58,7 @@ class Player {
         this.height = 20;
         this.xInterval = 37.5;
         this.yInterval = 109;
+        this.hit = [];
     }
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
@@ -86,11 +98,28 @@ class Player {
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        if (this.hit) {
+            ctx.drawImage(Resources.get('images/Hit.png'), this.x + this.hit[0], this.y + this.hit[1]);
+        }
     }
     // Render player animation when hit by one of the enemies
     restart(dt) {
         this.x = 202;
         this.y = 404;
+    }
+    lose(hit) {
+        document.removeEventListener('keyup', keyRelease);
+        document.removeEventListener('keydown', keyPress);
+        this.h = 0;
+        this.v = 0;
+        this.hit = hit;
+        window.setTimeout(function playerLose() {
+            player.hit = [];
+            player.x = 202;
+            player.y = 404;
+            document.addEventListener('keyup', keyRelease);
+            document.addEventListener('keydown', keyPress);
+        }, 1000);
     }
     handleInput(expression) {
         switch (expression) {
@@ -122,20 +151,8 @@ class Player {
     }
 }
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
-const enemy1 = new Enemy(-101, 131, 1);
-const enemy2 = new Enemy(-303, 212, 2);
-const enemy3 = new Enemy(-50.5, 293, 1.5);
-let allEnemies = [enemy1, enemy2, enemy3];
-const player = new Player(202, 404);
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keydown', function(e) {
-    var allowedKeys = {
+function keyPress(e) {
+    const allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
@@ -143,10 +160,10 @@ document.addEventListener('keydown', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-});
+}
 
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
+function keyRelease(e) {
+    const allowedKeys = {
         37: 'release-left',
         38: 'release-up',
         39: 'release-right',
@@ -154,4 +171,19 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-});
+}
+
+// Now instantiate your objects.
+// Place all enemy objects in an array called allEnemies
+// Place the player object in a variable called player
+
+const enemy1 = new Enemy(-101, 131, 1);
+const enemy2 = new Enemy(-303, 212, 1);
+const enemy3 = new Enemy(-50.5, 293, 1);
+let allEnemies = [enemy1, enemy2, enemy3];
+const player = new Player(202, 404);
+
+// This listens for key presses and sends the keys to your
+// Player.handleInput() method. You don't need to modify this.
+document.addEventListener('keydown', keyPress);
+document.addEventListener('keyup', keyRelease);
